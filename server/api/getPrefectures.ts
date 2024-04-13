@@ -1,22 +1,21 @@
-import { defineEventHandler } from "h3";
+import axios from 'axios'
+import { eventHandler } from 'h3'
 
-export default defineEventHandler(async () => {
-  const config = useRuntimeConfig();
-  const apiKey = config.public.RESAS_API_KEY;
+export default eventHandler(async () => {
   try {
-    const response = await fetch(`${config.public.API_BASE_URL}/prefectures`, {
-      headers: {
-        "X-API-KEY": apiKey,
-      },
-    });
-    if (!response.ok) {
-      throw new Error("Failed to fetch prefectures");
-    }
-    const data = await response.json();
-    return data;
+    const response = await axios.get(
+      'https://opendata.resas-portal.go.jp/api/v1/prefectures',
+      {
+        headers: { 'X-API-KEY': process.env.RESAS_API_KEY }
+      }
+    )
+
+    return response.data
   } catch (error) {
-    // エラー処理
-    console.error("API call failed:", error);
-    return { statusCode: 500, message: "Internal Server Error" };
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Internal Server Error' })
+    }
   }
-});
+})
