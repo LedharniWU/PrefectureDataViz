@@ -1,0 +1,26 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parserOptions": {
+    "parser": "@typescript-eslint/parser",
+    "sourceType": "module"
+  },
+  "extends": [
+    "@nuxtjs",
+    "plugin:nuxt/recommended",
+    "@nuxtjs/eslint-config-typescript"
+  ],
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    // "no-console": process.env.NODE_ENV === 'production' ? 1 : 0,
+    // "no-debugger": process.env.NODE_ENV === 'production' ? 1 : 0,
+    "vue/singleline-html-element-content-newline": 0,
+    "vue/multiline-html-element-content-newline": "off",
+    "vue/html-self-closing": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "nuxt/no-cjs-in-config": "off"
+  }
+}
