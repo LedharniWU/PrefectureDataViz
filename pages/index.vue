@@ -1,12 +1,21 @@
 <template>
   <div class="container">
     <h1>都道府県別の総人口推移を表示します。</h1>
-    <PrefectureSelector />
+    <PrefectureSelector @update-selected-prefectures="handleSelectedPrefectures" />
+    <PopulationCharts :selected-prefectures="selectedPrefectures" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import PrefectureSelector from '~/components/PrefectureSelector.vue'
+import PopulationCharts from '~/components/PopulationCharts.vue'
+
+const selectedPrefectures = ref([])
+
+const handleSelectedPrefectures = (newSelectedPrefectures: []) => {
+  selectedPrefectures.value = newSelectedPrefectures
+}
 </script>
 
 <style>
