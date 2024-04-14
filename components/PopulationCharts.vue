@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>都道府県別人口構成</h1>
     <div id="populationChart"></div>
   </div>
 </template>
@@ -16,39 +15,14 @@ const props = defineProps({
 
 const prefecturesPopulation = ref([])
 
-const drawChart = () => {
-  if (!prefecturesPopulation.value.length) {
-    Highcharts.chart('populationChart', {
-      chart: {
-        type: 'line'
-      },
-      title: {
-        text: '都道府県別人口推移'
-      },
-      xAxis: {
-        categories: []
-      },
-      yAxis: {
-        title: {
-          text: '人口数'
-        }
-      },
-      series: [{
-        name: 'データがありません',
-        data: []
-      }],
-      noData: {
-        style: {
-          fontWeight: 'bold',
-          fontSize: '15px',
-          color: '#303030'
-        },
-        text: '選択された都道府県がありません。'
-      }
-    })
-    return
-  }
+// 空のデータセットで初期化
+const chartData = ref({
+  series: []
+})
 
+const xAxisCategories = ref(['2020', '2021', '2022', '2023']) // 可以保留这些年份，即使没有数据
+
+const drawChart = () => {
   Highcharts.chart('populationChart', {
     chart: {
       type: 'line'
@@ -57,7 +31,7 @@ const drawChart = () => {
       text: '都道府県別人口推移'
     },
     xAxis: {
-      categories: prefecturesPopulation.value[0].data.map(d => `${d.year}`),
+      categories: xAxisCategories.value,
       title: {
         text: '年度'
       }
@@ -67,25 +41,36 @@ const drawChart = () => {
         text: '人口数'
       }
     },
-    series: prefecturesPopulation.value.map(prefecture => ({
-      name: prefecture.prefName,
-      data: prefecture.data.map(d => d.value)
-    }))
+    series: chartData.value.series
   })
 }
 
 watchEffect(async () => {
-  const responses = await Promise.all(
-    props.selectedPrefectures.map(prefecture =>
-      useFetch(`/api/getPopulationByYear?prefCode=${prefecture.prefCode}`).then(res => ({
-        prefName: prefecture.prefName,
-        prefCode: prefecture.prefCode,
-        data: res.data
-      }))
+  if (props.selectedPrefectures.length > 0) {
+    const responses = await Promise.all(
+      props.selectedPrefectures.map(prefecture =>
+        useFetch(`/api/getPopulationByYear?prefCode=${prefecture.prefCode}`).then(res => ({
+          prefName: prefecture.prefName,
+          prefCode: prefecture.prefCode,
+          data: res.data
+        }))
+      )
     )
-  )
+    prefecturesPopulation.value = responses
 
-  prefecturesPopulation.value = responses
+    chartData.value.series = prefecturesPopulation.value.map(prefecture => ({
+      name: prefecture.prefName,
+      data: prefecture.data.map(d => d.value)
+    }))
+
+    xAxisCategories.value = prefecturesPopulation.value[0].data.map(d => `${d.year}`)
+  } else {
+    prefecturesPopulation.value = []
+    chartData.value.series = []
+  }
+})
+
+watch(prefecturesPopulation, () => {
   drawChart()
 })
 
