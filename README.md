@@ -1,16 +1,27 @@
-# Nuxt Example
+# PrefectureDataViz
 
-Deploy your [Nuxt](https://nuxt.com) project to Vercel with zero configuration.
+## 仕様
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/vercel/tree/main/examples/nuxtjs&template=nuxtjs)
+1. RESAS(地域経済分析システム) API の「都道府県一覧」API から取得する
+2. API レスポンスから都道府県一覧のチェックボックスを動的に生成する
+3. 都道府県にチェックを入れると、RESAS API から選択された都道府県の「人口構
+   成」を取得する
+4. 人口構成 API レスポンスから、X 軸:年、Y 軸:人口数の折れ線グラフを動的に生成し
+   て表示する
 
-_Live Example: https://nuxtjs-template.vercel.app_
+## 事前準備
 
-Look at the [Nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+RESAS(地域経済分析システム) API の API キーを[取得](https://opendata.resas-portal.go.jp/)し、.env ファイルに記述して root 上に配置してください。
+
+### .env 記述例
+
+```
+RESAS_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+RESAS_API_KEY は取得したキーを記述してください。
 
 ## Setup
-
-Make sure to install the dependencies:
 
 ```bash
 # yarn
@@ -29,20 +40,6 @@ Start the development server on http://localhost:3000
 
 ```bash
 npm run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
 ```
 
 Checkout the [deployment documentation](https://nuxt.com/docs/getting-started/deployment#presets) for more information.
