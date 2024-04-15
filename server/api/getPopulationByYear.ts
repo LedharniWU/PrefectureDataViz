@@ -16,7 +16,7 @@ export default eventHandler(async (event) => {
       }
     )
 
-    return response.data.result.data.find((i:any) => i.label === '総人口').data
+    return response.data.result.data.find((i:{label:string, data:[]}) => i.label === '総人口').data
   } catch (error) {
     return {
       statusCode: 500,
