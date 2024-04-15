@@ -14,6 +14,7 @@ const props = defineProps({
 })
 
 const prefecturesPopulation = ref([])
+const oldPrefecturesPopulation = ref([])
 
 // 空のデータセットで初期化
 const chartData = ref({
@@ -45,17 +46,22 @@ const drawChart = () => {
   })
 }
 
+const getPopulationByYear = async (prefecture) => {
+  const responses = await useFetch(`/api/getPopulationByYear?prefCode=${prefecture.prefCode}`).then(res => ({
+    prefName: prefecture.prefName,
+    prefCode: prefecture.prefCode,
+    data: res.data
+  }))
+
+  return responses
+}
+
 watchEffect(async () => {
   if (props.selectedPrefectures.length > 0) {
     const responses = await Promise.all(
-      props.selectedPrefectures.map(prefecture =>
-        useFetch(`/api/getPopulationByYear?prefCode=${prefecture.prefCode}`).then(res => ({
-          prefName: prefecture.prefName,
-          prefCode: prefecture.prefCode,
-          data: res.data
-        }))
-      )
+      props.selectedPrefectures.map(prefecture => getPopulationByYear(prefecture))
     )
+
     prefecturesPopulation.value = responses
 
     chartData.value.series = prefecturesPopulation.value.map(prefecture => ({
