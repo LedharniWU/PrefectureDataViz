@@ -20,7 +20,7 @@ const chartData = ref({
   series: []
 })
 
-const xAxisCategories = ref(['2020', '2021', '2022', '2023']) // 可以保留这些年份，即使没有数据
+const xAxisCategories = ref(['2020', '2021', '2022', '2023'])
 
 const drawChart = () => {
   Highcharts.chart('populationChart', {

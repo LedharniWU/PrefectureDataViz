@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <h1>都道府県別の総人口推移を表示します。</h1>
     <PrefectureSelector @update-selected-prefectures="handleSelectedPrefectures" />
     <PopulationCharts :selected-prefectures="selectedPrefectures" />
   </div>

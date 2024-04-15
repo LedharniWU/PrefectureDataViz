@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="container">
     <h1>都道府県一覧</h1>
-    <ul>
+    <ul class="prefecture-list">
       <li v-for="prefecture in prefectures" :key="prefecture.prefCode">
         <input
           type="checkbox"
@@ -48,3 +48,26 @@ watch(selectedPrefectures, (newVal) => {
 }, { deep: true })
 
 </script>
+
+<style scoped>
+.container {
+  text-align: center;
+}
+
+.prefecture-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.prefecture-list li {
+  flex: 0 0 calc(20% - 10px);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
